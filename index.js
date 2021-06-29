@@ -2,6 +2,15 @@ const Discord = require('discord.js');
 const moment = require('moment');
 const config = require('./config');
 const client = new Discord.Client();
+if (!config.hasOwnProperty("PREFIX")) {
+	config.PREFIX = "$"; // set default bot prefix
+  }
+
+const prefix = config.PREFIX;
+
+console.log('Prefix: '+ prefix);
+console.log('Channel ID: ' + config.CHANNEL_ID)
+
 client.on('ready', () => {
 	console.log('I am ready! Current time is ' + moment().format('LT'));
 });
@@ -34,7 +43,7 @@ client.on('message', (message) => {
 			'- RTF Description be more detailed\n\n' +
 			'_Contact BuffMan for more info and any feature requests_\n';
 		message.channel.send(formatFancyMessage(m));
-	} else if (message.content.startsWith('$.')) {
+	} else if (message.content.startsWith(prefix + '.')) {
 		console.log('CRYPTO');
 		let ticker = message.content.toLowerCase().split(' ')[0].substring(2);
 		let rawOptions = message.content.toLowerCase().split(ticker)[1].substring(1).split(' ');
@@ -76,17 +85,7 @@ client.on('message', (message) => {
 					msg.react('❌');
 				});
 		}
-	} else if (message.content.startsWith('$sectors')) {
-		console.log('SECTORS');
-		let rawOptions = message.content.toLowerCase().split(' ');
-		let rawTimePeriod = 'day';
-		if (rawOptions.length > 1) {
-			rawTimePeriod = rawOptions[1];
-		}
-		let formattedTimePeriod = extractFromOptions('time_period_sector', rawTimePeriod);
-
-		message.channel.send('Finviz has cut support for this feature. RIP $sectors', {});
-	} else if (message.content.startsWith('$/')) {
+	} else if (message.content.startsWith(prefix + '/')) {
 		console.log('FUTURES');
 		let ticker = message.content.toLowerCase().split(' ')[0].substring(1);
 		let rawOptions = message.content.toLowerCase().split(ticker)[1].substring(1).split(' ');
@@ -113,7 +112,7 @@ client.on('message', (message) => {
 					msg.react('❌');
 				});
 		}
-	} else if (message.content.startsWith('$')) {
+	} else if (message.content.startsWith(prefix)) {
 		let ticker = message.content.toLowerCase().split(' ')[0].substring(1);
 		let rawOptions = message.content.toLowerCase().split(ticker)[1].split(' ');
 		let options = [];
