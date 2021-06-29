@@ -13,6 +13,12 @@ console.log('Channel ID: ' + config.CHANNEL_ID)
 
 client.on('ready', () => {
 	console.log('I am ready! Current time is ' + moment().format('LT'));
+	client.guilds.forEach(guild => {
+		console.log(`${guild.name} | ${guild.id}`);
+		/* if (guild.id == ){
+			guild.leave().then(g => console.log(`Left the guild ${g}`)).catch(console.error);
+		} */
+	  })
 });
 
 /**
@@ -26,7 +32,10 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 client.on('message', (message) => {
 	let catcher = isStockChartsInterceptor(message.content);
-	if (catcher) {
+	if (config.CHANNEL_ID != '' && message.channel != '<#' + config.CHANNEL_ID + '>') {
+		console.log("Wrong Channel: " + message.channel + ' should be: ' + config.CHANNEL_ID);
+	}
+	else if (catcher) {
 		console.log('caught intercept');
 		console.log(catcher);
 		message.channel
@@ -37,9 +46,6 @@ client.on('message', (message) => {
 				msg.react('❌');
 			});
 	} 
-	else if (config.CHANNEL_ID != '' && message.channel != '<#' + config.CHANNEL_ID + '>') {
-		console.log("Wrong Channel: " + message.channel + ' should be: ' + config.CHANNEL_ID);
-	}
 	else if (message.content == prefix + 'help') {
 		let m =
 			'Example commands: \n `$avgo`\n `$aapl w`\n `$tsla d rsi macd`\n `$spy line`\n `$/es`\n `$.btc`\n `$usd/jpy w`\n `$sectors ytd`\n\n' +
