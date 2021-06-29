@@ -13,6 +13,7 @@ console.log('Channel ID: ' + config.CHANNEL_ID)
 
 client.on('ready', () => {
 	console.log('I am ready! Current time is ' + moment().format('LT'));
+	console.log('Bot ID: ' + client.user.id)
 	client.guilds.forEach(guild => {
 		console.log(`${guild.name} | ${guild.id}`);
 		/* if (guild.id == ){
@@ -25,11 +26,15 @@ client.on('ready', () => {
  * Handler for garbage collecting old messages
  */
 client.on('messageReactionAdd', (reaction, user) => {
+	console.log('Author ID: ' + reaction.message.author.id + ' Bot_ID:' + client.user.id)
 	if (user.bot) return;
 	if (reaction.emoji.name !== '❌') return;
-	if (reaction.message.author.id == config.BOT_ID) reaction.message.delete();
+	if (reaction.message.author.id == client.user.id) reaction.message.delete();
 });
 
+
+
+// (Finviz Charts)
 client.on('message', (message) => {
 	let catcher = isStockChartsInterceptor(message.content);
 	if (config.CHANNEL_ID != '' && message.channel != '<#' + config.CHANNEL_ID + '>') {
