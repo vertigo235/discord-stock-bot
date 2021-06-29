@@ -2,9 +2,9 @@ const Discord = require('discord.js');
 const moment = require('moment');
 const config = require('./config');
 const client = new Discord.Client();
-if (!config.hasOwnProperty("PREFIX")) {
+/*if (!config.hasOwnProperty("PREFIX")) {
 	config.PREFIX = "$"; // set default bot prefix
-  }
+  } */
 
 const prefix = config.PREFIX;
 
@@ -36,13 +36,15 @@ client.on('message', (message) => {
 			.then((msg) => {
 				msg.react('❌');
 			});
-	} else if (message.content == '$help') {
+	} 
+	else if (config.CHANNEL_ID != '' && message.channel != '<#' + config.CHANNEL_ID + '>') {
+		console.log("Wrong Channel: " + message.channel + ' should be: ' + config.CHANNEL_ID);
+	}
+	else if (message.content == prefix + 'help') {
 		let m =
-			'fsb-ticker. Developed by BuffMan \n\n Example commands: \n `$avgo`\n `$aapl w`\n `$tsla d rsi macd`\n `$spy line`\n `$/es`\n `$.btc`\n `$usd/jpy w`\n `$sectors ytd`\n\n' +
-			'**Currently Scheduled Features**\n' +
-			'- RTF Description be more detailed\n\n' +
-			'_Contact BuffMan for more info and any feature requests_\n';
-		message.channel.send(formatFancyMessage(m));
+			'Example commands: \n `$avgo`\n `$aapl w`\n `$tsla d rsi macd`\n `$spy line`\n `$/es`\n `$.btc`\n `$usd/jpy w`\n `$sectors ytd`\n\n' +
+			'';
+		message.channel.send(m);
 	} else if (message.content.startsWith(prefix + '.')) {
 		console.log('CRYPTO');
 		let ticker = message.content.toLowerCase().split(' ')[0].substring(2);
@@ -194,11 +196,11 @@ function isStockChartsInterceptor(content) {
 		}
 	];
 
-	if (!content.includes('$')) return false;
+	if (!content.includes(prefix)) return false;
 
 	//$ssec 15 rsi
 	//$ups
-	let tickerName = content.split('$')[1].split(' ')[0].toUpperCase();
+	let tickerName = content.split(prefix)[1].split(' ')[0].toUpperCase();
 	console.log('163:' + tickerName);
 	for (let i = 0; i < VALID_INTERCEPTORS.length; i++) {
 		let intec = VALID_INTERCEPTORS[i];
