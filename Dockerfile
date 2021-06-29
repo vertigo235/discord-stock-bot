@@ -7,7 +7,7 @@ RUN mkdir /app && \
     mkdir /home/app && \
     chown app:app /home/app
 
-COPY --chown=app:app discord-stock-bot-page/ index.js package-lock.json package.json entrypoint.sh /app/
+COPY --chown=app:app discord-stock-bot-page/ *.js package-lock.json package.json entrypoint.sh /app/
 WORKDIR /app
 USER app
 
